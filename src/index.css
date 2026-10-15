@@ -1,7 +1,15 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Chomsky';
+  src: url('https://fonts.cdnfonts.com/s/14884/Chomsky.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
-  --font-masthead: "UnifrakturCook", "UnifrakturMaguntia", "Chomsky", "Playfair Display", Georgia, serif;
+  --font-masthead: "Chomsky", "UnifrakturCook", "UnifrakturMaguntia", "Playfair Display", Georgia, serif;
   --font-headline: "Libre Caslon Text", "Playfair Display", Georgia, serif;
   --font-body: "Source Serif 4", Georgia, serif;
   --font-nyt-sans: "Libre Franklin", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -17,12 +25,12 @@
   --color-surface-variant: #e2e2e2;
   --color-surface-bright: #ffffff;
   --color-on-surface: #1a1c1c;
-  --color-on-surface-variant: #444748;
-  --color-outline: #747878;
+  --color-on-surface-variant: #2d3132;
+  --color-outline: #5a5f60;
   --color-outline-variant: #c4c7c7;
   --color-primary: #000000;
   --color-on-primary: #ffffff;
-  --color-secondary: #5e5e5e;
+  --color-secondary: #484848;
   --color-error: #ba1a1a;
   --color-on-error: #ffffff;
 }
@@ -37,13 +45,13 @@
   --color-surface-container-highest: #ded7c9;
   --color-surface-variant: #dfd7c8;
   --color-surface-bright: #fbf7ed;
-  --color-on-surface: #2b251e;
-  --color-on-surface-variant: #564c40;
-  --color-outline: #8c7e6c;
+  --color-on-surface: #1f1b16;
+  --color-on-surface-variant: #3d352b;
+  --color-outline: #7a6e5e;
   --color-outline-variant: #d5cbba;
-  --color-primary: #1c150c;
+  --color-primary: #120e08;
   --color-on-primary: #ffffff;
-  --color-secondary: #6e6153;
+  --color-secondary: #574b3d;
   --color-error: #a8201a;
   --color-on-error: #ffffff;
 }
@@ -58,13 +66,13 @@
   --color-surface-container-highest: #333333;
   --color-surface-variant: #2d2d2d;
   --color-surface-bright: #1f1f1f;
-  --color-on-surface: #ededed;
-  --color-on-surface-variant: #b0b0b0;
-  --color-outline: #808080;
+  --color-on-surface: #f3f3f3;
+  --color-on-surface-variant: #cccccc;
+  --color-outline: #9e9e9e;
   --color-outline-variant: #404040;
   --color-primary: #ffffff;
   --color-on-primary: #000000;
-  --color-secondary: #9e9e9e;
+  --color-secondary: #b5b5b5;
   --color-error: #e04545;
   --color-on-error: #ffffff;
 }
@@ -75,12 +83,14 @@
     padding: 0;
     background-color: var(--color-surface);
     color: var(--color-on-surface);
-    transition: background-color 0.25s ease, color 0.25s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
 .masthead-font {
-  font-family: var(--font-masthead);
+  font-family: 'Chomsky', 'UnifrakturCook', 'UnifrakturMaguntia', 'Playfair Display', Georgia, serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 .font-headline-hero {

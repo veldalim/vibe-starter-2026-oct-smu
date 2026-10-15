@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Bookmark, ChevronDown, User, Check, Globe, CloudSun, Moon, Sun, BookOpen } from 'lucide-react';
+import { Search, Bookmark, ChevronDown, Check, CloudSun, BookOpen } from 'lucide-react';
 import { SectionId } from '../types';
-import NYTMasthead from './NYTMasthead';
 
 interface HeaderProps {
   activeSection: SectionId;
@@ -33,7 +32,7 @@ export default function Header({
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showThemeMenu, setShowThemeMenu] = useState(false);
 
-  // Micro simulated stock ticks for a realistic trading floor vibe
+  // Micro simulated stock ticks
   const [spChange, setSpChange] = useState('+0.42%');
   const [nasdaqChange, setNasdaqChange] = useState('+0.68%');
 
@@ -81,15 +80,15 @@ export default function Header({
     <header className="w-full bg-surface-container-lowest border-b border-surface-variant relative z-30">
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top Utility Bar */}
-        <div className="h-10 flex items-center justify-between text-on-surface-variant font-label-nav text-caption">
-          {/* Left: Date, Today's Paper & Weather */}
-          <div className="flex items-center gap-3 sm:gap-4">
-            <span className="hidden sm:inline font-medium">Wednesday, May 21, 2025</span>
-            <span className="sm:hidden font-medium">May 21, 2025</span>
+        <div className="h-10 flex items-center justify-between font-label-nav text-xs text-on-surface border-b border-surface-variant/60">
+          {/* Left: Date, Today's Paper & Edition */}
+          <div className="flex items-center gap-3 sm:gap-4 font-semibold text-on-surface">
+            <span className="hidden sm:inline font-medium text-secondary">Wednesday, May 21, 2025</span>
+            <span className="sm:hidden font-medium text-secondary">May 21, 2025</span>
             <span className="text-outline-variant select-none">|</span>
             <button
               onClick={() => onSelectSection('front-page')}
-              className="hover:text-primary transition-colors font-semibold cursor-pointer"
+              className="hover:text-primary transition-colors cursor-pointer text-primary"
             >
               Today’s Paper
             </button>
@@ -97,14 +96,14 @@ export default function Header({
             <div className="relative">
               <button
                 onClick={() => setShowEditionMenu(!showEditionMenu)}
-                className="flex items-center gap-1 cursor-pointer hover:text-primary transition-colors font-medium"
+                className="flex items-center gap-1 cursor-pointer hover:text-primary transition-colors text-primary"
               >
                 <span>{edition}</span>
                 <ChevronDown className="w-3.5 h-3.5" />
               </button>
 
               {showEditionMenu && (
-                <div className="absolute top-full left-0 mt-1 bg-surface-container-lowest border border-surface-variant shadow-lg py-1.5 min-w-[160px] z-40 font-label-nav">
+                <div className="absolute top-full left-0 mt-1 bg-surface-container-lowest border border-surface-variant shadow-xl py-1.5 min-w-[160px] z-40 font-label-nav text-xs">
                   {editions.map(ed => (
                     <button
                       key={ed}
@@ -112,7 +111,7 @@ export default function Header({
                         setEdition(ed);
                         setShowEditionMenu(false);
                       }}
-                      className="w-full text-left px-3 py-1.5 text-xs hover:bg-surface-container flex items-center justify-between cursor-pointer"
+                      className="w-full text-left px-3 py-1.5 hover:bg-surface-container flex items-center justify-between cursor-pointer text-primary"
                     >
                       <span>{ed}</span>
                       {edition === ed && <Check className="w-3 h-3 text-primary" />}
@@ -122,36 +121,36 @@ export default function Header({
               )}
             </div>
 
-            {/* Weather badge */}
-            <div className="hidden lg:flex items-center gap-1.5 text-secondary pl-1 border-l border-surface-variant text-[11px]">
+            {/* Weather */}
+            <div className="hidden lg:flex items-center gap-1.5 text-secondary pl-2 border-l border-surface-variant text-[11px] font-normal">
               <CloudSun className="w-3.5 h-3.5 text-amber-600" />
               <span>New York 68°F</span>
             </div>
           </div>
 
-          {/* Right: Financial Ticker, Paper Mode, Actions, Profile */}
+          {/* Right: Stocks, Tone, Actions, Subscribe & Login */}
           <div className="flex items-center gap-3 sm:gap-4">
             {/* Markets ticker */}
             <div className="hidden xl:flex items-center gap-4 text-[11px] font-mono">
               <span className="flex items-center gap-1">
-                <span className="font-semibold text-primary">S&amp;P 500</span>
-                <span className="text-[#137333] transition-colors duration-500">{spChange}</span>
+                <span className="font-bold text-primary">S&amp;P 500</span>
+                <span className="text-[#137333] font-semibold">{spChange}</span>
               </span>
               <span className="flex items-center gap-1">
-                <span className="font-semibold text-primary">NASDAQ</span>
-                <span className="text-[#137333] transition-colors duration-500">{nasdaqChange}</span>
+                <span className="font-bold text-primary">NASDAQ</span>
+                <span className="text-[#137333] font-semibold">{nasdaqChange}</span>
               </span>
             </div>
 
-            {/* Paper Reading Mode Toggle (Newsprint / Sepia / Dark) */}
+            {/* Paper Tone (Newsprint / Sepia / Dark) */}
             <div className="relative">
               <button
                 onClick={() => setShowThemeMenu(!showThemeMenu)}
-                className="p-1 hover:text-primary transition-colors cursor-pointer text-secondary flex items-center gap-1 text-[11px] font-label-nav"
-                title="Paper Reading Tone"
+                className="p-1 hover:text-primary transition-colors cursor-pointer text-secondary flex items-center gap-1 text-[11px]"
+                title="Paper Tone"
               >
                 <BookOpen className="w-3.5 h-3.5" />
-                <span className="hidden md:inline capitalize">{paperTheme}</span>
+                <span className="hidden md:inline capitalize font-medium">{paperTheme}</span>
               </button>
 
               {showThemeMenu && (
@@ -200,7 +199,7 @@ export default function Header({
               <Search className="w-4 h-4" />
             </button>
 
-            {/* Saved bookmarks */}
+            {/* Saved Bookmarks */}
             <button
               onClick={onOpenBookmarks}
               className="p-1 hover:text-primary transition-colors cursor-pointer text-secondary relative"
@@ -214,11 +213,11 @@ export default function Header({
               )}
             </button>
 
-            {/* Subscription CTA button */}
+            {/* Subscribe CTA Button */}
             {!isSubscribed ? (
               <button
                 onClick={onOpenSubscribe}
-                className="bg-primary text-on-primary font-kicker text-kicker uppercase px-2.5 sm:px-3 py-1 sm:py-1.5 hover:bg-surface-container-highest hover:text-on-surface transition-colors tracking-wider text-[10px] sm:text-[11px] font-bold cursor-pointer"
+                className="bg-primary text-on-primary font-kicker text-[11px] uppercase px-3 py-1.5 hover:bg-surface-container-highest hover:text-primary transition-colors tracking-wider font-extrabold cursor-pointer"
               >
                 SUBSCRIBE FOR $1/WK
               </button>
@@ -228,7 +227,15 @@ export default function Header({
               </span>
             )}
 
-            {/* User Profile */}
+            {/* Log In Button */}
+            <button
+              onClick={onOpenSubscribe}
+              className="border border-primary text-primary font-kicker text-[11px] uppercase px-3 py-1.5 hover:bg-primary hover:text-on-primary transition-colors tracking-wider font-bold cursor-pointer hidden sm:block"
+            >
+              LOG IN
+            </button>
+
+            {/* User Profile Avatar */}
             <div className="relative">
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
@@ -237,7 +244,7 @@ export default function Header({
               >
                 <img
                   alt="Profile"
-                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border border-surface-variant hover:ring-2 hover:ring-primary transition-all"
+                  className="w-8 h-8 rounded-full object-cover border border-surface-variant hover:ring-2 hover:ring-primary transition-all"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjbq7nOAmXto8EnNwFDh2pKUlfJJ6FiWWOrnNN80HR7d5Y7PLErtx_YOyKJnn2KDZwrwdBN0Z0odg4aXhJESXKNgxu4IXV3diomQ4jbPln-UXG7B1v_fRTkM0lmoqSy4EGJTJ7kkFBR8XxMt5YLKWIaRcp2ghH3vaF_VTsP85pT2kNLvRthXEQ_gkdyb3xgZP_0yeeksSYw8G3CR2JAtnBoIBI1VjjoL7Wr6JZbHCMqjI6XkaiCp_1"
                 />
               </button>
@@ -287,30 +294,36 @@ export default function Header({
           </div>
         </div>
 
-        {/* Big Masthead with Razor-Sharp Gothic SVG */}
-        <div className="py-5 sm:py-6 flex flex-col items-center justify-center">
-          <NYTMasthead
+        {/* Big Masthead - Crisp, Pristine, 100% Legible */}
+        <div className="py-6 sm:py-8 flex flex-col items-center justify-center">
+          <button
             onClick={() => onSelectSection('front-page')}
-            className="w-full max-w-[620px] sm:max-w-[720px] lg:max-w-[800px] h-14 sm:h-16 md:h-20 lg:h-22 px-2"
-          />
-          <div className="text-center mt-2.5 font-subhead-italic text-caption text-secondary italic tracking-wide">
+            className="text-center cursor-pointer group focus:outline-none"
+          >
+            <h1
+              className="masthead-font text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-normal text-primary leading-none select-none drop-shadow-xs font-bold"
+            >
+              The New York Times
+            </h1>
+          </button>
+          <div className="text-center mt-3 font-subhead-italic text-sm sm:text-base text-secondary italic tracking-wider">
             "All the News That's Fit to Print"
           </div>
         </div>
 
         {/* Section Navigation Bar */}
-        <div className="border-t-[3px] border-b border-primary py-2">
-          <nav className="flex items-center justify-between overflow-x-auto no-scrollbar gap-5 text-on-surface-variant font-label-nav text-xs sm:text-sm whitespace-nowrap">
+        <div className="border-t-[3px] border-b border-primary py-2.5">
+          <nav className="flex items-center justify-between overflow-x-auto no-scrollbar gap-5 text-on-surface font-label-nav text-[13px] md:text-[14px] whitespace-nowrap">
             {sections.map(sec => {
               const isActive = activeSection === sec.id;
               return (
                 <button
                   key={sec.id}
                   onClick={() => onSelectSection(sec.id)}
-                  className={`transition-colors cursor-pointer shrink-0 pb-0.5 ${
+                  className={`transition-colors cursor-pointer shrink-0 pb-0.5 tracking-tight ${
                     isActive
                       ? 'font-bold text-primary underline underline-offset-4 decoration-primary decoration-2'
-                      : 'hover:text-primary font-medium'
+                      : 'hover:text-primary font-medium text-secondary hover:underline'
                   }`}
                 >
                   {sec.label}
@@ -321,50 +334,50 @@ export default function Header({
         </div>
 
         {/* Trending Ribbon */}
-        <div className="border-b border-surface-variant py-2 flex items-center gap-4 overflow-x-auto no-scrollbar text-caption font-label-nav">
+        <div className="border-b border-surface-variant py-2.5 flex items-center gap-4 overflow-x-auto no-scrollbar text-caption font-label-nav">
           <div className="flex items-center gap-1.5 shrink-0 text-error font-bold uppercase tracking-wider text-[11px]">
             <span className="w-2 h-2 rounded-full bg-error animate-pulse"></span>
             TRENDING:
           </div>
-          <div className="flex items-center gap-4 text-on-surface-variant shrink-0 text-xs">
+          <div className="flex items-center gap-4 text-on-surface-variant shrink-0 text-xs sm:text-[13px]">
             <button
               onClick={() => onSelectSection('tech')}
-              className="hover:text-primary hover:underline transition-all cursor-pointer"
+              className="hover:text-primary hover:underline transition-all cursor-pointer font-medium"
             >
               Live Updates
             </button>
             <span className="text-outline-variant select-none">•</span>
             <button
               onClick={() => onSelectSection('world')}
-              className="hover:text-primary hover:underline transition-all cursor-pointer"
+              className="hover:text-primary hover:underline transition-all cursor-pointer font-medium"
             >
               Global Summit
             </button>
             <span className="text-outline-variant select-none">•</span>
             <button
               onClick={() => onSelectSection('tech')}
-              className="hover:text-primary hover:underline transition-all cursor-pointer"
+              className="hover:text-primary hover:underline transition-all cursor-pointer font-medium"
             >
               Tech Regulation
             </button>
             <span className="text-outline-variant select-none">•</span>
             <button
               onClick={() => onSelectSection('business')}
-              className="hover:text-primary hover:underline transition-all cursor-pointer"
+              className="hover:text-primary hover:underline transition-all cursor-pointer font-medium"
             >
               Economic Outlook
             </button>
             <span className="text-outline-variant select-none">•</span>
             <button
               onClick={() => onOpenGames('wordle')}
-              className="hover:text-primary hover:underline transition-all cursor-pointer font-bold"
+              className="hover:text-primary hover:underline transition-all cursor-pointer font-bold text-primary"
             >
               Wordle
             </button>
             <span className="text-outline-variant select-none">•</span>
             <button
               onClick={() => onOpenGames('mini')}
-              className="hover:text-primary hover:underline transition-all cursor-pointer font-bold"
+              className="hover:text-primary hover:underline transition-all cursor-pointer font-bold text-primary"
             >
               The Mini
             </button>
