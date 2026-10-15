@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Search, Bookmark, ChevronDown, User, Check, Globe } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, Bookmark, ChevronDown, User, Check, Globe, CloudSun, Moon, Sun, BookOpen } from 'lucide-react';
 import { SectionId } from '../types';
+import NYTMasthead from './NYTMasthead';
 
 interface HeaderProps {
   activeSection: SectionId;
@@ -11,6 +12,8 @@ interface HeaderProps {
   onOpenGames: (game?: 'wordle' | 'connections' | 'mini') => void;
   bookmarksCount: number;
   isSubscribed: boolean;
+  paperTheme: 'newsprint' | 'sepia' | 'dark';
+  onChangePaperTheme: (theme: 'newsprint' | 'sepia' | 'dark') => void;
 }
 
 export default function Header({
@@ -21,11 +24,28 @@ export default function Header({
   onOpenSearch,
   onOpenGames,
   bookmarksCount,
-  isSubscribed
+  isSubscribed,
+  paperTheme,
+  onChangePaperTheme
 }: HeaderProps) {
   const [edition, setEdition] = useState<'U.S. Edition' | 'International Edition' | 'Canadian Edition' | 'Español' | '中文'>('U.S. Edition');
   const [showEditionMenu, setShowEditionMenu] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showThemeMenu, setShowThemeMenu] = useState(false);
+
+  // Micro simulated stock ticks for a realistic trading floor vibe
+  const [spChange, setSpChange] = useState('+0.42%');
+  const [nasdaqChange, setNasdaqChange] = useState('+0.68%');
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const spTick = (0.38 + Math.random() * 0.1).toFixed(2);
+      const nasdaqTick = (0.64 + Math.random() * 0.1).toFixed(2);
+      setSpChange(`+${spTick}%`);
+      setNasdaqChange(`+${nasdaqTick}%`);
+    }, 9000);
+    return () => clearInterval(interval);
+  }, []);
 
   const sections: { id: SectionId; label: string }[] = [
     { id: 'front-page', label: 'U.S.' },
@@ -62,10 +82,10 @@ export default function Header({
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top Utility Bar */}
         <div className="h-10 flex items-center justify-between text-on-surface-variant font-label-nav text-caption">
-          {/* Left: Date & Editions */}
+          {/* Left: Date, Today's Paper & Weather */}
           <div className="flex items-center gap-3 sm:gap-4">
-            <span className="hidden sm:inline">Wednesday, May 21, 2025</span>
-            <span className="sm:hidden">May 21, 2025</span>
+            <span className="hidden sm:inline font-medium">Wednesday, May 21, 2025</span>
+            <span className="sm:hidden font-medium">May 21, 2025</span>
             <span className="text-outline-variant select-none">|</span>
             <button
               onClick={() => onSelectSection('front-page')}
@@ -101,20 +121,74 @@ export default function Header({
                 </div>
               )}
             </div>
+
+            {/* Weather badge */}
+            <div className="hidden lg:flex items-center gap-1.5 text-secondary pl-1 border-l border-surface-variant text-[11px]">
+              <CloudSun className="w-3.5 h-3.5 text-amber-600" />
+              <span>New York 68°F</span>
+            </div>
           </div>
 
-          {/* Right: Financial Ticker, Actions, Profile */}
-          <div className="flex items-center gap-3 sm:gap-5">
+          {/* Right: Financial Ticker, Paper Mode, Actions, Profile */}
+          <div className="flex items-center gap-3 sm:gap-4">
             {/* Markets ticker */}
             <div className="hidden xl:flex items-center gap-4 text-[11px] font-mono">
               <span className="flex items-center gap-1">
                 <span className="font-semibold text-primary">S&amp;P 500</span>
-                <span className="text-[#137333]">+0.42%</span>
+                <span className="text-[#137333] transition-colors duration-500">{spChange}</span>
               </span>
               <span className="flex items-center gap-1">
                 <span className="font-semibold text-primary">NASDAQ</span>
-                <span className="text-[#137333]">+0.68%</span>
+                <span className="text-[#137333] transition-colors duration-500">{nasdaqChange}</span>
               </span>
+            </div>
+
+            {/* Paper Reading Mode Toggle (Newsprint / Sepia / Dark) */}
+            <div className="relative">
+              <button
+                onClick={() => setShowThemeMenu(!showThemeMenu)}
+                className="p-1 hover:text-primary transition-colors cursor-pointer text-secondary flex items-center gap-1 text-[11px] font-label-nav"
+                title="Paper Reading Tone"
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                <span className="hidden md:inline capitalize">{paperTheme}</span>
+              </button>
+
+              {showThemeMenu && (
+                <div className="absolute top-full right-0 mt-1 bg-surface-container-lowest border border-surface-variant shadow-xl py-1.5 min-w-[140px] z-40 font-label-nav text-xs">
+                  <div className="px-3 py-1 text-[10px] font-kicker uppercase font-bold text-secondary">Paper Tone</div>
+                  <button
+                    onClick={() => {
+                      onChangePaperTheme('newsprint');
+                      setShowThemeMenu(false);
+                    }}
+                    className="w-full text-left px-3 py-1.5 hover:bg-surface-container flex items-center justify-between cursor-pointer"
+                  >
+                    <span>Newsprint</span>
+                    {paperTheme === 'newsprint' && <Check className="w-3 h-3 text-primary" />}
+                  </button>
+                  <button
+                    onClick={() => {
+                      onChangePaperTheme('sepia');
+                      setShowThemeMenu(false);
+                    }}
+                    className="w-full text-left px-3 py-1.5 hover:bg-surface-container flex items-center justify-between cursor-pointer"
+                  >
+                    <span>Archival Sepia</span>
+                    {paperTheme === 'sepia' && <Check className="w-3 h-3 text-primary" />}
+                  </button>
+                  <button
+                    onClick={() => {
+                      onChangePaperTheme('dark');
+                      setShowThemeMenu(false);
+                    }}
+                    className="w-full text-left px-3 py-1.5 hover:bg-surface-container flex items-center justify-between cursor-pointer"
+                  >
+                    <span>Night Edition</span>
+                    {paperTheme === 'dark' && <Check className="w-3 h-3 text-primary" />}
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Search Icon */}
@@ -150,7 +224,7 @@ export default function Header({
               </button>
             ) : (
               <span className="bg-[#137333] text-white font-kicker text-[10px] uppercase px-2.5 py-1 tracking-wider font-bold">
-                ALL ACCESS SUBSCRIBER
+                SUBSCRIBER PASS
               </span>
             )}
 
@@ -163,7 +237,7 @@ export default function Header({
               >
                 <img
                   alt="Profile"
-                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border border-surface-variant"
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border border-surface-variant hover:ring-2 hover:ring-primary transition-all"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjbq7nOAmXto8EnNwFDh2pKUlfJJ6FiWWOrnNN80HR7d5Y7PLErtx_YOyKJnn2KDZwrwdBN0Z0odg4aXhJESXKNgxu4IXV3diomQ4jbPln-UXG7B1v_fRTkM0lmoqSy4EGJTJ7kkFBR8XxMt5YLKWIaRcp2ghH3vaF_VTsP85pT2kNLvRthXEQ_gkdyb3xgZP_0yeeksSYw8G3CR2JAtnBoIBI1VjjoL7Wr6JZbHCMqjI6XkaiCp_1"
                 />
               </button>
@@ -213,17 +287,13 @@ export default function Header({
           </div>
         </div>
 
-        {/* Big Masthead */}
+        {/* Big Masthead with Razor-Sharp Gothic SVG */}
         <div className="py-5 sm:py-6 flex flex-col items-center justify-center">
-          <button
+          <NYTMasthead
             onClick={() => onSelectSection('front-page')}
-            className="text-center group cursor-pointer"
-          >
-            <h1 className="masthead-font text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-primary leading-none select-none drop-shadow-xs">
-              The New York Times
-            </h1>
-          </button>
-          <div className="text-center mt-2 font-subhead-italic text-caption text-secondary italic">
+            className="w-full max-w-[620px] sm:max-w-[720px] lg:max-w-[800px] h-14 sm:h-16 md:h-20 lg:h-22 px-2"
+          />
+          <div className="text-center mt-2.5 font-subhead-italic text-caption text-secondary italic tracking-wide">
             "All the News That's Fit to Print"
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import LeadBroadsheet from './components/LeadBroadsheet';
 import NewsCultureVerticals from './components/NewsCultureVerticals';
@@ -31,10 +31,19 @@ export default function App() {
   const [isBookmarksOpen, setIsBookmarksOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [paperTheme, setPaperTheme] = useState<'newsprint' | 'sepia' | 'dark'>('newsprint');
   const [savedArticleIds, setSavedArticleIds] = useState<string[]>([
     'geneva-accord-frontier-models',
     'cooking-crispy-gnocchi'
   ]);
+
+  useEffect(() => {
+    if (paperTheme === 'newsprint') {
+      document.documentElement.removeAttribute('data-theme');
+    } else {
+      document.documentElement.setAttribute('data-theme', paperTheme);
+    }
+  }, [paperTheme]);
 
   const handleToggleBookmark = (articleId: string) => {
     setSavedArticleIds(prev =>
@@ -50,7 +59,7 @@ export default function App() {
   const athleticArticle = ARTICLES_DATA.find(a => a.id === 'athletic-champions-league') || HERO_ARTICLE;
 
   return (
-    <div className="min-h-screen bg-surface text-on-surface flex flex-col font-body-md antialiased selection:bg-surface-variant">
+    <div className="min-h-screen bg-surface text-on-surface flex flex-col font-body-md antialiased selection:bg-surface-variant transition-colors duration-300">
       {/* Top Masthead & Navigation */}
       <Header
         activeSection={activeSection}
@@ -72,6 +81,8 @@ export default function App() {
         onOpenGames={handleOpenGames}
         bookmarksCount={savedArticleIds.length}
         isSubscribed={isSubscribed}
+        paperTheme={paperTheme}
+        onChangePaperTheme={setPaperTheme}
       />
 
       {/* Main Newspaper Canvas */}
@@ -135,6 +146,7 @@ export default function App() {
         isBookmarked={selectedArticle ? savedArticleIds.includes(selectedArticle.id) : false}
         onToggleBookmark={handleToggleBookmark}
         onOpenDataTracker={() => setIsDataTrackerOpen(true)}
+        onSelectRelatedArticle={rel => setSelectedArticle(rel)}
       />
 
       <DataTrackerModal
